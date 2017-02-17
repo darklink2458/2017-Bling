@@ -9,24 +9,13 @@
 #define DATA_PIN 11
 #define CLOCK_PIN 13
 
-#define YELLOW CRGB(252, 255, 0)
+#define YELLOW CRGB(255, 225, 0)
 //#define YELLOW CRGB(255, 255, 255)
+//#define BLUE CRGB(0, 0,0)
 #define BLUE CRGB(20, 85,251)
-
-
-#define COG_SIZE 5
-
-/*
-Ronnie: I won't be able to come to Robotics today. If you read this message, you should test each method.
-Personally, I would prefer if we kept the arduino off of the robot until the competition so that we can add more light designs.
-It would be easier to test the lights when it isn't on the robot.
-
-I have added a Cog method to this, as well as a shift up and shift down method. This allows for us to easily string lights together and move them back and forth.
-
-You also may want to take out the interrupting red lights.
-
-*/
-
+#define INPUT_PIN 5 
+//pinMode(INPUT_PIN, INPUT);
+#define COG_SIZE 8
 
 
 // Define the array of leds
@@ -34,10 +23,15 @@ CRGB leds[NUM_LEDS];
 
 void setup() {
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
-  FastLED.setBrightness(30);
+  FastLED.setBrightness(40);
+
+  Serial.begin(9600);
+  while(!Serial);
+    Serial.print("Hello");
 }
 
 void loop() {
+  
   cogs(YELLOW, BLUE);
   rotatingCogsUp(YELLOW, BLUE);
   rotatingCogsDown(YELLOW, BLUE);
@@ -51,12 +45,17 @@ void loop() {
   expandMiddle(YELLOW, BLUE);
 }
 
+void test(){
+  //FastLED.show();
+  Serial.print("Hello");
+  }
+
 void rotatingCogsUp(CRGB colorOne, CRGB colorTwo) {
   FastLED.show();
   for (int i = 0; i < 30; i++) {
     for (int c = 0; c < COG_SIZE; c++) {
       moveCogsUp();
-      delay(100);
+      delay(50);
       FastLED.show();
     }
   }
@@ -67,7 +66,7 @@ void rotatingCogsDown(CRGB colorOne, CRGB colorTwo) {
   for (int i = 0; i < 30; i++) {
     for (int c = 0; c < COG_SIZE; c++) {
       moveCogsDown();
-      delay(100);
+      delay(50);
       FastLED.show();
     }
   }
@@ -82,7 +81,7 @@ void cylon(CRGB colorOne, CRGB colorTwo) {
 		// now that we've shown the leds, reset the i'th led to black
 		leds[i] = colorTwo;
 		// Wait a little bit before we loop around and do it again
-		delay(30);
+		delay(15);
 	}
 
 	// Now go in the other direction.  
@@ -94,7 +93,7 @@ void cylon(CRGB colorOne, CRGB colorTwo) {
 		// now that we've shown the leds, reset the i'th led to black
 		leds[i] = colorOne;
 		// Wait a little bit before we loop around and do it again
-		delay(30);
+		delay(15);
 	}
 }
 
@@ -110,7 +109,7 @@ void alternate(CRGB colorOne, CRGB colorTwo) {
   }
   
   FastLED.show();
-  delay(200);
+  delay(100);
   
   for(int i = 0; i < NUM_LEDS; i++) {
     
@@ -124,7 +123,7 @@ void alternate(CRGB colorOne, CRGB colorTwo) {
   }
   
   FastLED.show();
-  delay(200);
+  delay(100);
 }
 
 void displayColor(CRGB color) {
@@ -196,12 +195,12 @@ void expandMiddle(CRGB colorOne, CRGB colorTwo) {
     for (int c = 0; c < COG_SIZE; c++) {
       insertMiddle(colorOne);
       FastLED.show();
-      delay(70);
+      delay(35);
     }
     for (int c = 0; c < COG_SIZE; c++) {
       insertMiddle(colorTwo);
       FastLED.show();
-      delay(70);
+      delay(35);
     }
   }
 }
